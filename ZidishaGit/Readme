@@ -1,0 +1,24 @@
+In this repository in order to run the model, you only need a few of these files.
+
+1. Zidisha Logistic Regression
+2. Zidisha Predictive SVM
+3. Zidisha running script for interest rate determination
+4. Zidisha running script for interest rate determination Fraud incorporation
+5. Zidisha Validation Real
+6. POLYsvmfit1.pckl (multiple files and if you update the model, this will be a new name)
+7. msvmdf1.csv (again, if you update this, the name will be different)
+
+In order to run the models, you only need to run either (3) or (4) above. The difference between the 2 is that (3) does not have the fraud probabilities incorporated whereas (4) does. I suggest that you run each separately and store in different columns so you can have a sense of how much of the interest rate is due to risk of loan vs risk of fraud
+
+I also suggest that the models should be updated on a 3-6 month timeline. In order to do this, you can first use Zidisha Logistic Regression to identify the features that could be important in the models (note you will need to change parameters in here). One you have identified the features, Zidisha Predictive SVM (with the proper features incorporated) can be used to retrain a new predictive model. You should validate this with Zidisha Validation Real (run this 10 times and make sure that the mean squared error is better than the previous models). Once this is all done, you will notice that you have a series of new pckl and csv files that will need to be updated in (3) and (4) in order to incorporate the new trained model.
+
+**
+Note that the SQL calls may need to be changed for the new database and especially for the fraud incorporation. Because fraud incorporation needs prior probabilities (from a Bayesian standpoint) the every time a new fraud score is calculated and used in interest determination, it requires every previous users fraud score.
+
+***
+In terms of general improvements to the model:
+1. Given several policy changes to be implemented due to fraud and lender retention, the population will change and likely some feature strengths will be altered and certain other features will show up. I suggest that you allow about 6 months for the policy changes to take hold and generate enough data before you look at things again.
+
+2. The current model employs a class bias to deal with fully repaid loans. You can think of this as a binary probability of default regardless of whether or not you have made some payments. I think the model can be significantly improved by creating a model for the binary probability of default (currently this value is empirical). One thing that came up that was really useful was sift score. I understand why this cannot be used, which is why nothing is implemented right now. However, to my understanding, you will be implementing a different credit metric/score metric. As a first pass, I would take a look at how this metric helps predict, a priori, whether a person is likely to ever default.
+
+
